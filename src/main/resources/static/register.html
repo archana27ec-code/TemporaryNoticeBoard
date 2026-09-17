@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up - Temporary Notice Board</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .signup-container {
+            width: 400px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Sign Up and Sign In buttons */
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .auth-buttons a {
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            padding: 11px;
+            border-radius: 6px;
+            background: #e5e7eb;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .auth-buttons a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .auth-buttons a:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .signin-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        .signin-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="signup-container">
+
+        <h1>📝 Sign Up</h1>
+
+        <p class="subtitle">Temporary Notice Board</p>
+
+
+        <!-- Sign Up and Sign In buttons -->
+
+        <div class="auth-buttons">
+
+            <a href="register.html" class="active">
+                Sign Up
+            </a>
+
+            <a href="signin.html">
+                Sign In
+            </a>
+
+        </div>
+
+
+        <!-- Sign Up Form -->
+
+        <form action="/signup" method="post">
+
+            <label for="studentname">
+                Student Name
+            </label>
+
+            <input type="text"
+                   id="studentname"
+                   name="studentname"
+                   placeholder="Enter your name"
+                   required>
+
+
+            <label for="email">
+                Email
+            </label>
+
+            <input type="email"
+                   id="email"
+                   name="email"
+                   placeholder="Enter your email"
+                   required>
+
+
+            <label for="password">
+                Password
+            </label>
+
+            <input type="password"
+                   id="password"
+                   name="password"
+                   placeholder="Create a password"
+                   required>
+
+
+            <button type="submit">
+                Sign Up
+            </button>
+
+        </form>
+
+
+        <div class="signin-link">
+
+            Already have an account?
+
+            <a href="signin.html">
+                Sign In
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

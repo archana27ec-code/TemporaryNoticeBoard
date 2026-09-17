@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Temporary Notice Board</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 36px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .add-section {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .add-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 13px;
+            background-color: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background-color: #4f63c5;
+        }
+
+        .notice-section {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .notice-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #noticeContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .notice {
+            border-left: 6px solid #667eea;
+            background: #f7f8ff;
+            padding: 20px;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .notice h3 {
+            color: #333;
+            margin-bottom: 10px;
+            padding-right: 30px;
+        }
+
+        .notice p {
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .notice-date {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .empty {
+            text-align: center;
+            color: #888;
+            padding: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 28px;
+            }
+
+            body {
+                padding: 20px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <h1>📢 Temporary Notice Board</h1>
+            <p>Important announcements and temporary notices</p>
+        </div>
+
+        <!-- Add Notice -->
+        <div class="add-section">
+
+            <h2>➕ Add New Notice</h2>
+
+            <form id="noticeForm">
+
+                <label for="title">Notice Title</label>
+                <input
+                    type="text"
+                    id="title"
+                    placeholder="Enter notice title"
+                    required
+                >
+
+                <label for="message">Notice Description</label>
+                <textarea
+                    id="message"
+                    placeholder="Enter notice details"
+                    required
+                ></textarea>
+
+                <label for="date">Date</label>
+                <input
+                    type="date"
+                    id="date"
+                    required
+                >
+
+                <button type="submit" class="add-btn">
+                    Publish Notice
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- Notices -->
+        <div class="notice-section">
+
+            <h2>📋 Current Notices</h2>
+
+            <div id="noticeContainer">
+
+                <div class="empty">
+                    No notices available.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const noticeForm = document.getElementById("noticeForm");
+        const noticeContainer = document.getElementById("noticeContainer");
+
+        let notices = JSON.parse(localStorage.getItem("notices")) || [];
+
+        function displayNotices() {
+
+            noticeContainer.innerHTML = "";
+
+            if (notices.length === 0) {
+
+                noticeContainer.innerHTML = `
+                    <div class="empty">
+                        No notices available.
+                    </div>
+                `;
+
+                return;
+            }
+
+            notices.forEach((notice, index) => {
+
+                const noticeDiv = document.createElement("div");
+
+                noticeDiv.className = "notice";
+
+                noticeDiv.innerHTML = `
+                    <h3>${notice.title}</h3>
+
+                    <p>${notice.message}</p>
+
+                    <div class="notice-date">
+                        📅 ${notice.date}
+                    </div>
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteNotice(${index})">
+                        Delete Notice
+                    </button>
+                `;
+
+                noticeContainer.appendChild(noticeDiv);
+
+            });
+        }
+
+
+        noticeForm.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const title = document.getElementById("title").value;
+            const message = document.getElementById("message").value;
+            const date = document.getElementById("date").value;
+
+            const newNotice = {
+                title: title,
+                message: message,
+                date: date
+            };
+
+            notices.push(newNotice);
+
+            localStorage.setItem(
+                "notices",
+                JSON.stringify(notices)
+            );
+
+            noticeForm.reset();
+
+            displayNotices();
+
+        });
+
+
+        function deleteNotice(index) {
+
+            notices.splice(index, 1);
+
+            localStorage.setItem(
+                "notices",
+                JSON.stringify(notices)
+            );
+
+            displayNotices();
+
+        }
+
+
+        displayNotices();
+
+    </script>
+
+</body>
+
+</html>
